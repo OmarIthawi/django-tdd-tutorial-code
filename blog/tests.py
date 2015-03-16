@@ -107,6 +107,20 @@ class EntryViewTest(WebTest):
         self.assertIsNotNone(page.form)
         self.assertIsNotNone(page.form['name'])
 
+    def test_form_error(self):
+        page = self.app.get(self.entry.get_absolute_url())
+        page = page.form.submit()
+        self.assertContains(page, 'This field is required')
+
+    def test_form_success(self):
+        page = self.app.get(self.entry.get_absolute_url())
+        page.form['name'] = 'Omar'
+        page.form['email'] = 'i@omardo.com'
+        page.form['body'] = 'Salam'
+
+        page = page.form.submit()
+        self.assertRedirects(page, self.entry.get_absolute_url())
+
 
 class CommentModelTest(TestCase):
     def test_str_representation(self):
