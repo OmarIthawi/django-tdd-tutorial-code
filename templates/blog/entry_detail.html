@@ -13,4 +13,9 @@
     {% empty %}
         No comments yet.
     {% endfor %}
+
+    <form method="post">
+        {{ form.as_table }}
+        <input type="submit" value="Create Comment">
+    </form>
 {% endblock %}
