@@ -1,3 +1,5 @@
+from hashlib import md5
+
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
@@ -39,6 +41,12 @@ class Comment(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     modified_at = models.DateTimeField(auto_now=True, editable=False)
+
+    def gravatar_url(self):
+        email_md5 = md5(self.email.encode())
+        return "http://www.gravatar.com/avatar/{email_md5}.jpg?r=g".format(
+            email_md5=email_md5.hexdigest()
+        )
 
     def __str__(self):
         return self.body

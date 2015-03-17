@@ -8,6 +8,7 @@
         <p>
             <em>Posted by {{ comment.name }}</em>
         </p>
+        <img src="{{ comment.gravatar_url }}" align="left" />
 
         {{ comment | linebreaks }}
     {% empty %}

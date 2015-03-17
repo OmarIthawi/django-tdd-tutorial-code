@@ -70,6 +70,11 @@ class EntryViewTest(WebTest):
     def test_no_comment(self):
         res = self.client.get(self.entry.get_absolute_url())
         self.assertContains(res, 'No comments yet.')
+        self.assertNotContains(
+            res,
+            'www.gravatar.com/avatar/',
+            msg_prefix="The page shouldn't have a gravatar image when there's no comment",
+        )
 
     def test_add_one_more_test(self):
         """
@@ -85,7 +90,7 @@ class EntryViewTest(WebTest):
 
     def test_two_comments(self):
         entry = Entry.objects.create(title='1-title', body='1-body', author=self.user)
-        Comment.objects.create(
+        comment1 = Comment.objects.create(
             name='another_user_1',
             entry=entry,
             body='comment1',
@@ -104,6 +109,13 @@ class EntryViewTest(WebTest):
         self.assertContains(res, 'comment1')
         self.assertNotContains(res, 'a1@example.com')
         self.assertContains(res, 'comment2')
+        self.assertContains(res, comment1.gravatar_url(), msg_prefix='Display gravatar image')
+        self.assertContains(
+            res,
+            'www.gravatar.com/avatar/',
+            count=2,
+            msg_prefix='The page should have a gravatar image for each comment',
+        )
 
     def test_view_page(self):
         page = self.app.get(self.entry.get_absolute_url())
@@ -176,6 +188,11 @@ class CommentModelTest(TestCase):
     def test_str_representation(self):
         comment = Comment(body="My comment body")
         self.assertEqual(str(comment), "My comment body")
+
+    def test_gravatar_url(self):
+        comment = Comment(body="My comment", email="i@omardo.com")
+        expected = "http://www.gravatar.com/avatar/ef705d0532413ff81e65e2472752122c.jpg?r=g"
+        self.assertEqual(comment.gravatar_url(), expected)
 
 
 class CommentFormTest(TestCase):
