@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load blog_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +25,9 @@
             <p>
                 I am a Python developer and I like Django.
             </p>
+
+            <h3>Recent Entries</h3>
+            {% entry_history %}
         </div>
 
     </section>
