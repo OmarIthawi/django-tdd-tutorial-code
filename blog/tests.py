@@ -13,10 +13,10 @@ from .models import Entry, Comment
 class EntryModelTest(TestCase):
     def test_string_representation(self):
         entry = Entry(title="My entry title")
-        self.assertEqual(str(entry), entry.title)
+        self.assertEqual(unicode(entry), entry.title)
 
     def test_pluralization(self):
-        self.assertEqual(str(Entry._meta.verbose_name_plural), "entries")
+        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
 
     def test_get_absolute_url(self):
         user = get_user_model().objects.create(username='some_user')
@@ -187,7 +187,7 @@ class EntryViewTest(WebTest):
 class CommentModelTest(TestCase):
     def test_str_representation(self):
         comment = Comment(body="My comment body")
-        self.assertEqual(str(comment), "My comment body")
+        self.assertEqual(unicode(comment), "My comment body")
 
     def test_gravatar_url(self):
         comment = Comment(body="My comment", email="i@omardo.com")
