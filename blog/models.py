@@ -26,8 +26,11 @@ class Entry(models.Model):
         self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.title
+    def __unicode__(self):
+        return u'{title} by {author}'.format(
+            title=self.title,
+            author=self.author,
+        )
 
     class Meta:
         verbose_name_plural = "entries"
